@@ -1,0 +1,15 @@
+{
+    // Place your settings in this file to overwrite default and user settings.
+    // Tab size
+    "editor.tabSize": 2,
+    "editor.detectIndentation": false,
+    "editor.insertSpaces": true,
+  
+    // Auto prettify code after saving
+    "editor.formatOnSave": true,
+    "javascript.format.enable": false,
+    "prettier.eslintIntegration": true,
+  
+    "eslint.enable": true
+  }
+  
