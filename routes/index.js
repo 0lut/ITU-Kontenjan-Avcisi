@@ -50,9 +50,10 @@ router.post('/sendmessage', async (req, res) => {
     const message = req.body.message;
     try {
       const users = await User.find({});
+      console.log(users)
       users.map((user, index) => {
-        console.log(user)
-        setTimeout(
+        console.log(user.facebookId)
+        setTimeout(_ =>
           FacebookHelper.sendTextMessage(user.facebookId, message), index * 200)
       })
 
