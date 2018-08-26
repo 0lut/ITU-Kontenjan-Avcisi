@@ -12,11 +12,12 @@ function getSenderInfo(id) {
     .then(res => res.data)
     .catch(err => console.error(err));
 }
+
 function callSendAPI(messageData) {
   return axios
     .post(`${url}?access_token=${process.env.MESSENGER_ACCESS_TOKEN}`, messageData)
     .then(res => res.data)
-    .catch(err => err);
+    .catch(err => console.error(err));
 }
 
 function sendTextMessage(recipientId, messageText) {
@@ -43,11 +44,9 @@ function sendMenu(user, message) {
         type: 'template',
         payload: {
           template_type: 'generic',
-          elements: [
-            {
+          elements: [{
               title: 'Daha fazla seçenek için kaydır',
-              buttons: [
-                {
+              buttons: [{
                   type: 'postback',
                   title: 'CRN ekle',
                   payload: 'ADD_CRN',
@@ -66,8 +65,7 @@ function sendMenu(user, message) {
             },
             {
               title: 'Daha fazla seçenek için kaydır',
-              buttons: [
-                {
+              buttons: [{
                   type: 'postback',
                   title: 'Takibi bırak',
                   payload: 'UNFOLLOW',
@@ -87,7 +85,10 @@ function sendMenu(user, message) {
 }
 
 function showCrns(user) {
-  const buttonDiv = { title: 'Daha fazla seçenek için kaydır', buttons: [] };
+  const buttonDiv = {
+    title: 'Daha fazla seçenek için kaydır',
+    buttons: []
+  };
   const elements = [];
   for (let i = 0; i < user.crns.length; i++) {
     buttonDiv.buttons.push({
@@ -96,7 +97,8 @@ function showCrns(user) {
       payload: user.crns[i].code,
     });
     if (i % 3 === 2 && i !== user.crns.length - 1) {
-      const toPush = { ...buttonDiv };
+      const toPush = { ...buttonDiv
+      };
       elements.push(toPush);
       buttonDiv.buttons = [];
     }
@@ -118,6 +120,7 @@ function showCrns(user) {
   };
   return callSendAPI(payload);
 }
+
 function sendButton(user, title) {
   return callSendAPI({
     recipient: {
@@ -128,18 +131,14 @@ function sendButton(user, title) {
         type: 'template',
         payload: {
           template_type: 'generic',
-          elements: [
-            {
-              title,
-              buttons: [
-                {
-                  type: 'postback',
-                  title: 'Vazgeç',
-                  payload: 'Cancel',
-                },
-              ],
-            },
-          ],
+          elements: [{
+            title,
+            buttons: [{
+              type: 'postback',
+              title: 'Vazgeç',
+              payload: 'Cancel',
+            }, ],
+          }, ],
         },
       },
     },
