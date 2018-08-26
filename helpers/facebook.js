@@ -1,13 +1,13 @@
 const axios = require('axios');
 
 const url = 'https://graph.facebook.com/v2.6/me/messages';
-
+//const env = process.env;
 // TODO add .env
 
 function getSenderInfo(id) {
   return axios
     .get(`https://graph.facebook.com/v2.6/${id}?fields=first_name,last_name,profile_pic&access_token=${
-      process.env.PAGE_TOKEN
+     process.env.PAGE_TOKEN
     }`)
     .then(res => res.data)
     .catch(err => console.error(err));

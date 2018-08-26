@@ -17,7 +17,7 @@ const ruleFetcher = new schedule.RecurrenceRule();
 const notification = new Notification();
 const fetcher = new SisFetcher();
 
-ruleFetcher.minute = new schedule.Range(0, 59, 1);
+ruleFetcher.minute = new schedule.Range(1, 59, 15);
 
 // Load the variables in .env file to the process.env
 dotenv.config();
@@ -63,7 +63,7 @@ app.use((err, req, res, next) => {
 });
 
 schedule.scheduleJob(ruleFetcher, () => {
-  fetcher.fetchAndSave({});
+  fetcher.fetchAndSave({}, console.log);
 
-  setTimeout(() => notification.notificationToAll(), 90000);
+  setTimeout(() => notification.notificationToAll(),7000);
 });

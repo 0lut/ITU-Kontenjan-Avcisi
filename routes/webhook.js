@@ -16,7 +16,7 @@ router.post('/', (req, res) => {
       // Gets the message. entry.messaging is an array, but
       // will only ever contain one message, so we get index 0
       const webhookEvent = entry.messaging[0];
-      console.log(webhookEvent);
+      //console.log(webhookEvent);
 
       User.findOne({ facebookId: webhookEvent.sender.id }, (err, user) => {
         if (err) console.error(err);
@@ -29,7 +29,7 @@ router.post('/', (req, res) => {
             } else if (webhookEvent.postback.title === 'Takip ettiklerim') {
               user.state = User.STATES.Default;
               user.save();
-              FacebookHelper.showCrns(user).then(FacebookHelper.sendMenu(user, 'Ana menü'));
+              FacebookHelper.sendTextMessage(user.facebookId, 'Takip ettigin dersler: ' + user.crns.map(x=> {return x.code;} ).join(', ') ).then(FacebookHelper.sendMenu(user));
             } else if (webhookEvent.postback.title === 'CRN çıkar') {
               user.state = User.STATES.CRN_DELETE;
               user.save();
@@ -63,12 +63,7 @@ router.post('/', (req, res) => {
               user.save();
             } else if (user.state === User.STATES.CRN_ADD) {
               // Return back to menu TODO
-              if (user.crns.length >= 9) {
-                FacebookHelper.sendTextMessage(
-                  user.facebookId,
-                  "Yalnizca 9 CRN'yi takip edebilirsin",
-                );
-              } else {
+              
                 user.crns.push({ code: webhookEvent.message.text });
                 FacebookHelper.sendMenu(
                   user,
@@ -76,7 +71,7 @@ router.post('/', (req, res) => {
                     webhookEvent.message.text
                   } dersinde yer açılınca sana haber verecegiz!`,
                 );
-              }
+              
               user.state = User.STATES.Default;
               user.save();
             } else if (user.state === User.STATES.CRN_DELETE) {

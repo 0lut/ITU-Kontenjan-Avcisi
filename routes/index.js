@@ -5,11 +5,13 @@ const SisFetcher = require('../fetchers/sis');
 const router = express.Router();
 
 router.get('/', (req, res) => {
-  if (process.env.VERIFY_TOKEN !== req.query.verify_token) {
+  /*if (process.env.VERIFY_TOKEN !== req.query.verify_token) {
     res.sendStatus(404).end();
   } else {
     res.send('Root').end();
-  }
+  }*/
+res.set('Content-Type', 'application/json');
+res.send({"test":"json"}).end();
 });
 
 router.get('/sis', (req, res) => {

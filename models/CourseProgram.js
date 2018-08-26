@@ -6,6 +6,8 @@ const CourseProgram = mongoose.Schema(
     capacity: String,
     enrolled: String,
     courseCode: String,
+    name: String,
+    instructor: String,
   },
 
   {
