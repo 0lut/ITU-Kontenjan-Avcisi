@@ -34,3 +34,7 @@ We use [airbnb's javascript guideline](http://github.com/airbnb/javascript) to l
 #### Prettifying
 
 In the current setup, `prettifier-eslint` formats the file automatically after you save it. The prettifier uses the eslint configuration to format the code.
+
+#### Status
+This lovely bot can not be used anymore because of the facebook api policy. 
+I hope our great developers will do something better for us!
