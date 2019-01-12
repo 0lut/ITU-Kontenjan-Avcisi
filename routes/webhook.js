@@ -25,9 +25,7 @@ router.post('/', (req, res) => {
       }, (err, user) => {
         if (err) console.error(err);
         if (user) {
-          if (webhookEvent.message.text === 'naber') {
-            FacebookHelper.sendTextMessage(user.facebookId, "iyidir, senden?")
-          }
+
 
           if (webhookEvent.postback) {
             if (webhookEvent.postback.title === 'CRN ekle') {
@@ -123,7 +121,11 @@ router.post('/', (req, res) => {
                 name: data.first_name,
               });
               newUser.save();
-              FacebookHelper.sendMenu(newUser, `Selam ${newUser.name}`);
+              if (webhookEvent.message.text === 'naber') {
+                FacebookHelper.sendTextMessage(user.facebookId, "iyidir, senden? Daha fazlasi icin selam yazip devam edebilirsin")
+              } else {
+                FacebookHelper.sendMenu(newUser, `Selam ${newUser.name}`);
+              }
             })
             .catch(error => console.error(error));
         }
