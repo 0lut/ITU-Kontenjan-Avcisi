@@ -6,7 +6,8 @@ const User = require('../models/User');
 const router = express.Router();
 
 router.post('/', (req, res) => {
-  const body = { ...req.body };
+  const body = { ...req.body
+  };
   // console.log(body);
 
   // Checks this is an event from a page subscription
@@ -16,11 +17,18 @@ router.post('/', (req, res) => {
       // Gets the message. entry.messaging is an array, but
       // will only ever contain one message, so we get index 0
       const webhookEvent = entry.messaging[0];
-      //console.log(webhookEvent);
 
-      User.findOne({ facebookId: webhookEvent.sender.id }, (err, user) => {
+
+
+      User.findOne({
+        facebookId: webhookEvent.sender.id
+      }, (err, user) => {
         if (err) console.error(err);
         if (user) {
+          if (webhookEvent.message.text === 'naber') {
+            FacebookHelper.sendTextMessage(user.facebookId, "iyidir, senden?")
+          }
+
           if (webhookEvent.postback) {
             if (webhookEvent.postback.title === 'CRN ekle') {
               user.state = User.STATES.CRN_ADD;
@@ -29,7 +37,9 @@ router.post('/', (req, res) => {
             } else if (webhookEvent.postback.title === 'Takip ettiklerim') {
               user.state = User.STATES.Default;
               user.save();
-              FacebookHelper.sendTextMessage(user.facebookId, 'Takip ettigin dersler: ' + user.crns.map(x=> {return x.code;} ).join(', ') ).then(FacebookHelper.sendMenu(user));
+              FacebookHelper.sendTextMessage(user.facebookId, 'Takip ettigin dersler: ' + user.crns.map(x => {
+                return x.code;
+              }).join(', ')).then(FacebookHelper.sendMenu(user));
             } else if (webhookEvent.postback.title === 'CRN çıkar') {
               user.state = User.STATES.CRN_DELETE;
               user.save();
@@ -63,15 +73,17 @@ router.post('/', (req, res) => {
               user.save();
             } else if (user.state === User.STATES.CRN_ADD) {
               // Return back to menu TODO
-              
-                user.crns.push({ code: webhookEvent.message.text });
-                FacebookHelper.sendMenu(
-                  user,
-                  `Tesekkurler, ${
+
+              user.crns.push({
+                code: webhookEvent.message.text
+              });
+              FacebookHelper.sendMenu(
+                user,
+                `Tesekkurler, ${
                     webhookEvent.message.text
                   } dersinde yer açılınca sana haber verecegiz!`,
-                );
-              
+              );
+
               user.state = User.STATES.Default;
               user.save();
             } else if (user.state === User.STATES.CRN_DELETE) {
