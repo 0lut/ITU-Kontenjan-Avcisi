@@ -65,10 +65,16 @@ router.post('/', (req, res) => {
               user.save();
             }
           } else if (webhookEvent.message) {
+
+
             if (user.state === User.STATES.Default) {
-              FacebookHelper.sendMenu(user, `Selam ${user.name}`);
-              user.inputs.push(webhookEvent.message.text);
-              user.save();
+              if (webhookEvent.message.text === 'naber') {
+                FacebookHelper.sendTextMessage(user.facebookId, "iyidir, senden? Daha fazlasi icin selam yazip devam edebilirsin")
+              } else {
+                FacebookHelper.sendMenu(user, `Selam ${user.name}`);
+                user.inputs.push(webhookEvent.message.text);
+                user.save();
+              }
             } else if (user.state === User.STATES.CRN_ADD) {
               // Return back to menu TODO
 
